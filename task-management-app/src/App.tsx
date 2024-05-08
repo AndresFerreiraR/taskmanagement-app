@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import TaskColumn from "./components/TaskColumn";
+import TaskForm from "./components/TaskForm";
+import CheckMark from "./assets/check-mark-button.png";
+import DirectHit from "./assets/direct-hit.png";
+import Glowingstart from "./assets/glowing-star.png";
+import { useState } from "react";
+import { Task } from "./components/types";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  console.log("TASK", tasks);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="app">
+      <TaskForm setTasks={setTasks} />
+      <main className="app_main">
+        <TaskColumn
+          name="Section 1"
+          image={CheckMark}
+          tasks={tasks}
+          status="todo"
+        />
+        <TaskColumn
+          name="Section 2"
+          image={DirectHit}
+          tasks={tasks}
+          status="doing"
+        />
+        <TaskColumn
+          name="Section 3"
+          image={Glowingstart}
+          tasks={tasks}
+          status="done"
+        />
+      </main>
+    </div>
+  );
+};
 
-export default App
+export default App;
