@@ -1,16 +1,22 @@
+import { useEffect, useState } from "react";
+
 import "./App.css";
-import TaskColumn from "./components/TaskColumn";
-import TaskForm from "./components/TaskForm";
 import CheckMark from "./assets/check-mark-button.png";
 import DirectHit from "./assets/direct-hit.png";
 import Glowingstart from "./assets/glowing-star.png";
-import { useState } from "react";
+import TaskColumn from "./components/TaskColumn";
+import TaskForm from "./components/TaskForm";
 import { Task } from "./components/types";
 
-const App = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+const prevTasks: string | null = localStorage.getItem("tasks");
+const initialState = prevTasks !== null ? JSON.parse(prevTasks) : [];
 
-  console.log("TASK", tasks);
+const App = () => {
+  const [tasks, setTasks] = useState<Task[]>(initialState);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <div className="app">

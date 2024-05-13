@@ -1,13 +1,14 @@
 import { useState } from "react";
+
 import Tag from "./Tag";
 import "./TaskForm.css";
 import { Task, TaskFormProps } from "./types";
 
 const initialData: Task = {
-    name: "",
-    status: "todo",
-    tags: []
-}
+  name: "",
+  status: "todo",
+  tags: [],
+};
 
 const TaskForm = ({ setTasks }: TaskFormProps) => {
   const [taskData, setTaskData] = useState<Task>(initialData);
@@ -28,23 +29,28 @@ const TaskForm = ({ setTasks }: TaskFormProps) => {
     setTasks((prev: Task[]) => {
       return [...prev, taskData];
     });
-    setTaskData(initialData)
+    setTaskData(() => {
+      return { ...initialData };
+    });
   }
 
   function selectTag(tag: string) {
-    let newTags = taskData.tags;
-    if (!taskData.tags.some((prevTag) => prevTag === tag)) {
-      newTags.push(tag);
+    if (taskData.tags.some((prevTag) => prevTag === tag)) {
+      const newTags = taskData.tags.filter((oldTag) => oldTag !== tag);
+      setTaskData((prev: Task) => {
+        return {
+          ...prev,
+          tags: newTags,
+        };
+      });
     } else {
-      newTags = newTags.filter((oldTag) => oldTag !== tag);
+      setTaskData((prev: Task) => {
+        return {
+          ...prev,
+          tags: [...prev.tags, tag],
+        };
+      });
     }
-    setTaskData((prev) => {
-      return {
-        ...prev,
-        tags: newTags,
-      };
-    });
-    console.log(taskData);
   }
 
   function checkTag(tag: string) {

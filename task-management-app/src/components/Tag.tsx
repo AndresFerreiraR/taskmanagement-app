@@ -1,9 +1,8 @@
 import "./Tag.css"
 import { TagProps } from './types'
 
-// const Tag = ({ name = "default", selectTag, selectedTag }: { name: string, selectTag: (name: string) => void, selectedTag: boolean}) => {
 const Tag = ({ name = "default", selectTag, selectedTag }: TagProps) => {
-    const TAGS_STYLE = {
+    const TAGS_STYLE: any = {
         Front: { backgroundColor: "#15d4c8"},
         Back: { backgroundColor: "#00C60C"},
         Infrastructure: { backgroundColor: "#F03309"},
