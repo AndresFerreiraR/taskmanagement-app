@@ -52,7 +52,7 @@ const TaskForm = ({ setTasks }: TaskFormProps) => {
   }
 
   return (
-    <header className="app_header">
+    <header>
       <form onSubmit={handledSubmit}>
         <input
           name="name"

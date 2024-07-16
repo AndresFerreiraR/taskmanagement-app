@@ -13,7 +13,7 @@ export interface TagProps {
 export interface TaskcolumnProps {
   name: string;
   image: string;
-  tasks: {}[];
+  tasks: [];
   status: string;
 }
 

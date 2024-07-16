@@ -1,0 +1,34 @@
+interface Style {
+  paper: React.CSSProperties;
+  form: React.CSSProperties;
+  submit: React.CSSProperties;
+  avatar: React.CSSProperties;
+  icon: React.CSSProperties;
+}
+
+const Style : Style = {
+  paper: {
+    marginTop: 8,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  form: {
+    width: "100%",
+    marginTop: 20
+  },
+  submit: {
+    marginTop: 15
+  },
+  avatar: {
+    marginTop: 5,
+    backgroundColor: "#1976d2",
+    width: 60,
+    height: 60
+  },
+  icon: {
+    fontSize: 40
+  }
+}
+
+export default Style
