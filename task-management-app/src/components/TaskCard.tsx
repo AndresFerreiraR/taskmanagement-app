@@ -19,3 +19,4 @@ const TaskCard = ({ title, tags }: TaskCardProps) => {
 };
 
 export default TaskCard;
+

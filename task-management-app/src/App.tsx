@@ -1,47 +1,27 @@
-import { useEffect, useState } from "react";
-
+import { ThemeProvider } from "@mui/material";
 import "./App.css";
-import CheckMark from "./assets/check-mark-button.png";
-import DirectHit from "./assets/direct-hit.png";
-import Glowingstart from "./assets/glowing-star.png";
-import TaskColumn from "./components/TaskColumn";
-import TaskForm from "./components/TaskForm";
-import { Task } from "./components/types";
-
-const prevTasks: string | null = localStorage.getItem("tasks");
-const initialState = prevTasks !== null ? JSON.parse(prevTasks) : [];
+import RegisterUser from "./components/users/registerUser";
+import theme from "./common/theme/theme";
+import Login from "./components/users/login";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import TaskComponent from "./components/TaskComponent";
+//import TaskFormComp from "./components/taskFormComp";
 
 const App = () => {
-  const [tasks, setTasks] = useState<Task[]>(initialState);
+  // const [tasks, setTasks] = useState<Task[]>([]);
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+  // console.log("TASK", tasks);
 
   return (
-    <div className="app">
-      <TaskForm setTasks={setTasks} />
-      <main className="app_main">
-        <TaskColumn
-          name="Section 1"
-          image={CheckMark}
-          tasks={tasks}
-          status="todo"
-        />
-        <TaskColumn
-          name="Section 2"
-          image={DirectHit}
-          tasks={tasks}
-          status="doing"
-        />
-        <TaskColumn
-          name="Section 3"
-          image={Glowingstart}
-          tasks={tasks}
-          status="done"
-        />
-      </main>
-    </div>
+    <Router>
+      <ThemeProvider theme={theme}>
+          <Routes>
+            <Route path="/auth/login" Component={Login} />
+            <Route path="/auth/RegisterUser" Component={RegisterUser} />
+            <Route path="/task/Dashboard" Component={TaskComponent} />
+          </Routes>
+      </ThemeProvider>
+    </Router>
   );
 };
 
