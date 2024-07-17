@@ -1,11 +1,10 @@
-import { Grid, ThemeProvider } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import "./App.css";
-
 import RegisterUser from "./components/users/registerUser";
 import theme from "./common/theme/theme";
 import Login from "./components/users/login";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import TaskComponent from "./components/taskComponent";
+import TaskComponent from "./components/TaskComponent";
 //import TaskFormComp from "./components/taskFormComp";
 
 const App = () => {
@@ -16,13 +15,11 @@ const App = () => {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <Grid container>
           <Routes>
             <Route path="/auth/login" Component={Login} />
             <Route path="/auth/RegisterUser" Component={RegisterUser} />
             <Route path="/task/Dashboard" Component={TaskComponent} />
           </Routes>
-        </Grid>
       </ThemeProvider>
     </Router>
   );

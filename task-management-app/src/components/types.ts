@@ -6,14 +6,14 @@ export interface Task {
 
 export interface TagProps {
   name: string;
-  selectTag?: (name: string) => void;
-  selectedTag?: boolean;
+  selectTag: (name: string) => void;
+  selectedTag: boolean;
 }
 
 export interface TaskcolumnProps {
   name: string;
   image: string;
-  tasks: [];
+  tasks: {}[];
   status: string;
 }
 
@@ -26,4 +26,9 @@ export interface TaskColumnProps {
 
 export interface TaskFormProps {
   setTasks: (task: Task[]) => void;
+}
+
+export interface TaskCardProps {
+  title: string;
+  tags: string[];
 }
