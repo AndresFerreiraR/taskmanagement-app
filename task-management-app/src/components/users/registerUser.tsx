@@ -6,16 +6,17 @@ import IUser from "../../models/users/IUser";
 const RegisterUser = () => {
 
   const initialState: IUser = {
-    UserName: '',
-    Email: '',
-    Token: '',
-    FirstName: '',
-    MiddleInitial: '',
-    LastName: '',
-    Password: '',
+    id: '',
+    userName: '',
+    email: '',
+    token: '',
+    firstName: '',
+    middleInitial: '',
+    lastName: '',
+    password: '',
 };
 
-const [user, setUser] = useState(initialState);
+const [user, setUser] = useState<IUser>(initialState);
 
 const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
   const {name, value} = e.target;
@@ -44,30 +45,20 @@ const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="FirstName"
+              label="Nombre(s)"
               variant="outlined"
-              name="FirstName"
-              value={user.FirstName}
+              name="firstName"
+              value={user.firstName}
               onChange={setMemoryValue}
             />
           </Grid>
-          {/* <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="type your middlename"
-              variant="outlined"
-              name="MiddleInitial"
-              value={user.MiddleInitial}
-              onChange={setMemoryValue}
-            />
-          </Grid> */}
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="LastName"
+              label="Apellido(s)"
               variant="outlined"
-              name="MiddleInitial"
-              value={user.MiddleInitial}
+              name="lastName"
+              value={user.lastName}
               onChange={setMemoryValue}
             />
           </Grid>
@@ -76,9 +67,9 @@ const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
               fullWidth
               label="Email"
               variant="outlined"
-              name="Email"
+              name="email"
               type="email"
-              value={user.Email}
+              value={user.email}
               onChange={setMemoryValue}
             />
           </Grid>
@@ -87,8 +78,8 @@ const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
               fullWidth
               label="UserName"
               variant="outlined"
-              name="UserName"
-              value={user.UserName}
+              name="userName"
+              value={user.userName}
               onChange={setMemoryValue}
             />
           </Grid>
@@ -99,7 +90,7 @@ const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
               type="password"
               variant="outlined"
               name="password"
-              value={user.Password}
+              value={user.password}
               onChange={setMemoryValue}
             />
           </Grid>

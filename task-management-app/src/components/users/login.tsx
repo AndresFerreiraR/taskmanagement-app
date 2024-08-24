@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Avatar,
   Button,
@@ -8,8 +8,89 @@ import {
 } from "@mui/material";
 import LockPersonIcon from "@mui/icons-material/LockPerson";
 import Style from "../../common/styles/style";
+import ILoginUser from "../../models/users/ILoginUser";
+import UserActions from "../../actions/userActions";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../context/reducers/userSesionReducer";
+import { RootState } from "../../context/reducers";
+
 
 const Login = () => {
+  const userInputsProps = {
+    emailOrUser: '',
+    password: ''
+  };
+
+  const userAction = new UserActions();
+  const [userInputs, setUserInputs] = useState(userInputsProps);
+  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch();
+
+  const userSesionState = useSelector((state: RootState) => state.userSesionState);
+  const validateEmail = (email: string) => {
+    // Expresión regular simple para validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const setUserLoginValues = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserInputs((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+
+    if (name === "emailOrUser") {
+      if (value.includes("@") && !validateEmail(value)) {
+        setError("Por favor, ingrese un email válido.");
+      } else {
+        setError(null);
+      }
+    }
+  };
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    console.log("Inputs", userInputs);
+    let updatedLoginData: ILoginUser;
+    if (userInputs.emailOrUser.includes("@")) {
+      console.log("Entra por email");
+      updatedLoginData = {
+        email: userInputs.emailOrUser,
+        password: userInputs.password,
+        userName: ''
+      };
+    } else {
+      console.log("Entra por usuario");
+      updatedLoginData = {
+        email: '',
+        password: userInputs.password,
+        userName: userInputs.emailOrUser
+      };
+    }
+    console.log("el contendido del updatedLoginData es ", updatedLoginData)
+    await callActionAuthenticate(updatedLoginData);
+    console.log("valor del reductor userName", userSesionState.user.userName);
+    console.log("valor del reductor Email", userSesionState.user.email);
+    console.log("valor del reductor fullName", userSesionState.user.fullName);
+    console.log("valor del reductor token", userSesionState.user.token);
+  };
+
+  const callActionAuthenticate = async (user: ILoginUser) => {
+    console.log("Esto es desde el componente login", user);
+    const response = await userAction.AuthenticateUser(user);
+    console.log("Se supone que hizo el request y la respuesta es", response);
+    if(response && response.isSuccess){
+      console.log("entro al if", response)
+      dispatch(login(response.data));
+      window.localStorage.setItem("userToken", response.data.token);
+      console.log("valor del dispatch", response.data)
+    }else{
+      console.log("NO se que mierda estoy haciendo");
+    }
+  }
+
+
   return (
     <Container maxWidth="xs">
       <div style={Style.paper}>
@@ -22,9 +103,13 @@ const Login = () => {
         <form style={Style.form}>
           <TextField
             variant="outlined"
-            label="Ingrese username"
-            name="username"
+            name="emailOrUser"
+            label="Ingrese username o email"
+            value={userInputs.emailOrUser}
+            onChange={setUserLoginValues}
             fullWidth
+            error={!!error}
+            helperText={error}
           />
           <TextField
             variant="outlined"
@@ -33,6 +118,8 @@ const Login = () => {
             fullWidth
             margin="normal"
             type="password"
+            value={userInputs.password}
+            onChange={setUserLoginValues}
           />
           <Button
             type="submit"
@@ -40,6 +127,7 @@ const Login = () => {
             variant="contained"
             color="primary"
             style={Style.submit}
+            onClick={handleSubmit}
           >
             LogIn
           </Button>
