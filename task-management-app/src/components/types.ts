@@ -2,12 +2,13 @@ export interface Task {
   name: string;
   status: string;
   tags: string[];
+  id: string;
 }
 
 export interface TagProps {
   name: string;
   selectTag: (name: string) => void;
-  selectedTag: boolean;
+  selectedTag?: boolean;
 }
 
 export interface TaskcolumnProps {
@@ -22,6 +23,8 @@ export interface TaskColumnProps {
   image: string;
   tasks: Task[];
   status: string;
+  setActiveCard: (id: any) => void;
+  onDrop: (status: string, position: number) => void;
 }
 
 export interface TaskFormProps {
@@ -29,6 +32,8 @@ export interface TaskFormProps {
 }
 
 export interface TaskCardProps {
+  indexCard: number;
   title: string;
   tags: string[];
+  setActiveCard: (id: any) => void;
 }
