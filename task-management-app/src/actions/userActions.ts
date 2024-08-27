@@ -31,4 +31,9 @@ export default class UserActions {
         return userService.get<IResponse<IUser[]>>('User')
             .then((response: AxiosResponse<IResponse<IUser[]>>) => response.data);
     }
+
+    public GetUserById(id : string): Promise<IResponse<IUser>> {
+        return userService.get<IResponse<IUser>>(`User/${id}`)
+            .then((response: AxiosResponse<IResponse<IUser>>) => response.data);
+    }
 }

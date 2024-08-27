@@ -10,9 +10,9 @@ import LockPersonIcon from "@mui/icons-material/LockPerson";
 import Style from "../../common/styles/style";
 import ILoginUser from "../../models/users/ILoginUser";
 import UserActions from "../../actions/userActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login } from "../../context/reducers/userSesionReducer";
-import { RootState } from "../../context/reducers";
+import { openSnackbar } from "../../context/reducers/snackbarReducer";
 
 
 const Login = () => {
@@ -26,7 +26,6 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
 
-  const userSesionState = useSelector((state: RootState) => state.userSesionState);
   const validateEmail = (email: string) => {
     // Expresión regular simple para validar email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -70,10 +69,6 @@ const Login = () => {
     }
     console.log("el contendido del updatedLoginData es ", updatedLoginData)
     await callActionAuthenticate(updatedLoginData);
-    console.log("valor del reductor userName", userSesionState.user.userName);
-    console.log("valor del reductor Email", userSesionState.user.email);
-    console.log("valor del reductor fullName", userSesionState.user.fullName);
-    console.log("valor del reductor token", userSesionState.user.token);
   };
 
   const callActionAuthenticate = async (user: ILoginUser) => {
@@ -83,6 +78,7 @@ const Login = () => {
     if(response && response.isSuccess){
       console.log("entro al if", response)
       dispatch(login(response.data));
+      dispatch(openSnackbar("User successfully logged in"));
       window.localStorage.setItem("userToken", response.data.token);
       console.log("valor del dispatch", response.data)
     }else{

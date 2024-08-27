@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Typography, Grid, TextField, Button } from "@mui/material";
 import Style from "../../common/styles/style";
 import IUser from "../../models/users/IUser";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../context/reducers";
+import UserActions from "../../actions/userActions";
+import { openSnackbar } from "../../context/reducers/snackbarReducer";
 
-const RegisterUser = () => {
+const UserProfile = () => {
 
   const initialState: IUser = {
     id: '',
@@ -17,8 +21,27 @@ const RegisterUser = () => {
 };
 
 const [user, setUser] = useState<IUser>(initialState);
+const userAction = new UserActions();
+const userSesionState = useSelector((state: RootState) => state.userSesionState);
+const dispatch = useDispatch();
 
+useEffect(() => {
+ getCurrentUserSesion()
+}, [])
 
+const getCurrentUserSesion = async () => {
+  console.log("Esto es desde el componente UserProfile", user);
+  const response = await userAction.GetUserById(userSesionState.user.id);
+  console.log("Se supone que hizo el request desde UserProfile y la respuesta es", response);
+  if(response && response.isSuccess){
+    console.log("entro al if", response)
+    setUser(response.data);
+    dispatch(openSnackbar("Current data successful"));
+    console.log("valor del dispatch", response.data)
+  }else{
+    console.log("NO se que mierda estoy haciendo");
+  }
+}
 const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
   const {name, value} = e.target;
   setUser(previous => ({
@@ -27,11 +50,12 @@ const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
   }))
 };
 
+
   return (
     <Container maxWidth="md">
       <div style={Style.paper}>
         <Typography component="h1" variant="h5">
-          Registro de usaurio
+          Perfil Usuario
         </Typography>
       </div>
       <form style={Style.form}>
@@ -63,6 +87,7 @@ const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
               variant="outlined"
               name="email"
               type="email"
+              disabled
               value={user.email}
               onChange={setMemoryValue}
             />
@@ -71,6 +96,7 @@ const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
             <TextField
               fullWidth
               label="UserName"
+              disabled
               variant="outlined"
               name="userName"
               value={user.userName}
@@ -120,4 +146,4 @@ const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
   );
 };
 
-export default RegisterUser;
+export default UserProfile;

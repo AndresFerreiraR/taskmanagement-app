@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 
-const styles: { [key: string]: CSSProperties } = {
+const styles: { [key: string]: CSSProperties } =  {
   paper: {
     marginTop: 90,
     display: "flex",
