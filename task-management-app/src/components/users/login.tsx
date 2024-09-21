@@ -13,6 +13,7 @@ import UserActions from "../../actions/userActions";
 import { useDispatch } from "react-redux";
 import { login } from "../../context/reducers/userSesionReducer";
 import { openSnackbar } from "../../context/reducers/snackbarReducer";
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
@@ -24,6 +25,7 @@ const Login = () => {
   const userAction = new UserActions();
   const [userInputs, setUserInputs] = useState(userInputsProps);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const validateEmail = (email: string) => {
@@ -81,6 +83,7 @@ const Login = () => {
       dispatch(openSnackbar("User successfully logged in"));
       window.localStorage.setItem("userToken", response.data.token);
       console.log("valor del dispatch", response.data)
+      navigate('/');
     }else{
       console.log("NO se que mierda estoy haciendo");
     }

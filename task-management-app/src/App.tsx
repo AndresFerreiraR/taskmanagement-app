@@ -12,6 +12,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./context/reducers";
 import { closeSnackbar } from "./context/reducers/snackbarReducer";
 import UserProfile from "./components/users/userProfile";
+import TableProject from "./components/project/tableProject";
+import CreateProject from "./components/project/createProject";
+import CreateTask from "./components/task/createTask";
 
 const App = () => {
   const snackbarState = useSelector((state: RootState) => state.snackbarState);
@@ -36,6 +39,9 @@ const App = () => {
             <Route path="/auth/RegisterUser" element={<RegisterUser />} />
             <Route path="/auth/userProfile" element={<UserProfile />} />
             <Route path="/task/Dashboard" element={<TaskComponent />} />
+            <Route path="/project/new" element={<CreateProject />} />
+            <Route path="/" element={<TableProject />} />
+            <Route path="/task/New" element={<CreateTask/>}/>
             <Route element={<SafeRoute exact={true} path="/task/Dashboard" element={<TaskComponent />} />} />
           </Routes>
         </ThemeProvider>

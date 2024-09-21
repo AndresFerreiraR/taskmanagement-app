@@ -5,6 +5,7 @@ import '../../../common/styles/navBarStyles.css'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import TaskIcon from '@mui/icons-material/Task';
 
 const LeftMenu = () => {
 
@@ -22,20 +23,16 @@ const LeftMenu = () => {
             <AddBoxIcon/>
             <ListItemText classes={{ primary: 'listItemText'}} primary="Nuevo Proyecto" />
           </ListItem>
-          <ListItem component={Link} to="/project/Projects">
+          <ListItem component={Link} to="/">
             <MenuBookIcon/>
             <ListItemText classes={{ primary: 'listItemText'}} primary="Lista proyectos" />
           </ListItem>
         </List>
         <Divider />
         <List>
-          <ListItem component={Link} to="/instructor/new">
-            <i className="material-icons">person_add</i>
-            <ListItemText classes={{ primary: 'listItemText'}} primary="Nuevo Instructor" />
-          </ListItem>
-          <ListItem component={Link} to="/instructor/lista">
-            <i className="material-icons">people</i>
-            <ListItemText classes={{ primary: 'listItemText'}} primary="Lista Instructor" />
+          <ListItem component={Link} to="/Task/new">
+            <TaskIcon/>
+            <ListItemText classes={{ primary: 'listItemText'}} primary="Nueva tarea " />
           </ListItem>
         </List>
       </div>
