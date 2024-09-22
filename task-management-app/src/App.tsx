@@ -1,10 +1,8 @@
 import { Snackbar, ThemeProvider } from "@mui/material";
-import "./App.css";
 import RegisterUser from "./components/users/registerUser";
 import theme from "./common/theme/theme";
 import Login from "./components/users/login";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import TaskComponent from "./components/taskComponent";
 import React from "react";
 import AppNavBar from "./components/navigation/appNavBar";
 import SafeRoute from "./components/navigation/safeRoute";
@@ -15,6 +13,7 @@ import UserProfile from "./components/users/userProfile";
 import TableProject from "./components/project/tableProject";
 import CreateProject from "./components/project/createProject";
 import CreateTask from "./components/task/createTask";
+import TaskComponent from "./components/dashboard/task/TaskComponent";
 
 const App = () => {
   const snackbarState = useSelector((state: RootState) => state.snackbarState);
@@ -35,6 +34,9 @@ const App = () => {
         <ThemeProvider theme={theme}>
         <AppNavBar />
           <Routes>
+            <Route path="/auth/login" Component={Login} />
+            <Route path="/auth/RegisterUser" Component={RegisterUser} />
+            <Route path="/dashboard/task" Component={TaskComponent} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/RegisterUser" element={<RegisterUser />} />
             <Route path="/auth/userProfile" element={<UserProfile />} />

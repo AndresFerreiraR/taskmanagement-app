@@ -2,9 +2,10 @@ import { useState } from "react";
 
 import Tag from "./Tag";
 import "./TaskForm.css";
-import { Task, TaskFormProps } from "./types";
+import { Task, TaskFormProps } from "../../types";
 
 const initialData: Task = {
+  id: "",
   name: "",
   status: "todo",
   tags: [],
@@ -27,6 +28,7 @@ const TaskForm = ({ setTasks }: TaskFormProps) => {
   function handledSubmit(e: any) {
     e.preventDefault();
     setTasks((prev: Task[]) => {
+        taskData.id = crypto.randomUUID();
       return [...prev, taskData];
     });
     setTaskData(() => {
