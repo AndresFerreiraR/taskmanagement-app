@@ -60,4 +60,17 @@ export default class GenericRestService {
         });
       }
 
+      public patch<T, U>(ruta: string, body: U, config?: AxiosRequestConfig): AxiosPromise<T> {
+        return new Promise((resolve, reject) => {
+          this.service
+            .patch(`${ruta}`, body, config)
+            .then((respuesta) => {
+              resolve(respuesta);
+            })
+            .catch((e) => {
+              reject(e);
+            });
+        });
+      }
+
 }

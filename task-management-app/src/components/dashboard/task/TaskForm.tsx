@@ -3,20 +3,31 @@ import { useState } from "react";
 import Tag from "./Tag";
 import "./TaskForm.css";
 import { Task, TaskFormProps } from "../../types";
+import ITask from "../../../models/task/task";
+import TaskManagementActions from "../../../actions/taskManagementActions";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../context/reducers";
 
-const initialData: Task = {
-  id: "",
+
+const initialData: ITask = {
+  id: "00000000-0000-0000-0000-000000000000",
+  taskId: "00000000-0000-0000-0000-000000000000",
   name: "",
-  status: "todo",
+  state: "ToDo",
+  projectId: '',
+  createdBy: '',
+  assignedTo: '00000000-0000-0000-0000-000000000000',
   tags: [],
 };
 
 const TaskForm = ({ setTasks }: TaskFormProps) => {
-  const [taskData, setTaskData] = useState<Task>(initialData);
+  const [taskData, setTaskData] = useState<ITask>(initialData);
+  const taskAction = new TaskManagementActions();
+  const projectState = useSelector((state: RootState) => state.projectState);
+  const userSesionState = useSelector((state: RootState) => state.userSesionState);
 
   function handleFormChange(e: any) {
     const { name, value } = e.target;
-
     setTaskData((prev) => {
       return {
         ...prev,
@@ -27,13 +38,15 @@ const TaskForm = ({ setTasks }: TaskFormProps) => {
 
   function handledSubmit(e: any) {
     e.preventDefault();
-    setTasks((prev: Task[]) => {
-        taskData.id = crypto.randomUUID();
+    setTasks((prev: ITask[]) => {
+      taskData.projectId = projectState.project.id ?? '';
+      taskData.createdBy = userSesionState.user.id ?? '';
       return [...prev, taskData];
     });
     setTaskData(() => {
       return { ...initialData };
     });
+    taskAction.CreateTask(taskData);
   }
 
   function selectTag(tag: string) {
@@ -97,7 +110,7 @@ const TaskForm = ({ setTasks }: TaskFormProps) => {
           <div>
             <select
               className="task_status"
-              value={taskData.status}
+              value={taskData.state}
               onChange={handleFormChange}
               name="status"
             >

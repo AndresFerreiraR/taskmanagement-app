@@ -8,12 +8,18 @@ import IProject from "../../models/projects/project";
 import IBaseError from "../../models/errors/baseError";
 import { openSnackbar } from "../../context/reducers/snackbarReducer";
 import { Hidden, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
+import { setProject } from "../../context/reducers/projectReducer";
+import { useNavigate } from "react-router-dom";
+import UserActions from "../../actions/userActions";
+import IUser from "../../models/users/IUser";
 
 const TableProject = () => {
 
     const projectAction = new ProjectActions();
     const userSesionState = useSelector((state: RootState) => state.userSesionState);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const userAction = new UserActions();
 
     const filters: IFilterProjectPagination = {
         pageNumber: 1,
@@ -35,17 +41,23 @@ const TableProject = () => {
 
     const [filter, setFilter] = useState<IFilterProjectPagination>(filters);
     const [data, setData] = useState<IResponsePagination<IProject[]>>(dataPagination);
+    const [users, setUsers] = useState<IUser[]>([]);
 
     useEffect(() => {
         getProjects();
+        getAllUsers();
     }, [filter])
 
+    const getAllUsers = async () => {
+        const user = await userAction.GetAllUsers();
+        if (user.isSuccess) {
+            setUsers(user.data);
+        }
+    }
 
     const getProjects = async () => {
         const response = await projectAction.GetProjectsWithPagination(filter);
-        console.log("Se supone que hizo el request desde tabla y la respuesta es", response);
         if (response && response.isSuccess) {
-            console.log("entro al if", response)
             setData(response);
             dispatch(openSnackbar("Current data successful"));
             console.log("valor del dispatch", response.data)
@@ -69,6 +81,17 @@ const TableProject = () => {
             pageSize: parseInt(event.target.value, 10),
             pageNumber: 1, // Reinicia a la primera página
         }));
+    };
+
+    const handleRowClic = (project: IProject) => {
+        console.log(project)
+        dispatch(setProject(project));
+        navigate('/task/Dashboard');
+    }
+
+    const getUserName = (userId: string): string => {
+        const user = users.find((u) => u.id === userId); // Busca el usuario por ID
+        return user ? `${user.firstName} ${user.lastName}` : "Desconocido"; // Devuelve el nombre o "Desconocido"
     };
 
     return (
@@ -98,13 +121,16 @@ const TableProject = () => {
                     </TableHead>
                     <TableBody>
                         {data.data.map((project) => (
-                            <TableRow key={project.name}>
+                            <TableRow 
+                                key={project.id}
+                                onClick={() => handleRowClic(project)}
+                                style={{cursor:"pointer"}}
+                            >
                                 <TableCell align="left">{project.name}</TableCell>
-
                                 <Hidden mdDown>
                                     <TableCell align="left">{project.description}</TableCell>
-                                    <TableCell align="left">{project.assignedTo}</TableCell>
-                                    <TableCell align="left">{project.createdBy}</TableCell>
+                                    <TableCell align="left">{getUserName(project.assignedTo)}</TableCell>
+                                    <TableCell align="left">{getUserName(project.createdBy)}</TableCell>
                                 </Hidden>
                             </TableRow>
                         ))}

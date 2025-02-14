@@ -68,7 +68,7 @@ const SesionNavBar = () => {
                     <MenuIcon/>
                 </IconButton>
                 <Typography variant='h6'>
-                    Cursos Online
+                    Administrador De Tareas
                 </Typography>
                 <div className={'grow'}></div>
                 <div className={'seccionDesktop'}>

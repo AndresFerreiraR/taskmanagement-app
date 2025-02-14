@@ -7,31 +7,30 @@ import { TaskColumnProps } from "../../types";
 const TaskColumn = ({
   name,
   image,
-  tasks,
+  tasksCard,
+  users,
   status,
   setActiveCard,
   onDrop,
 }: TaskColumnProps) => {
+
   return (
     <section className="task_column">
       <h2 className="task_column_heading">
         <img className="task_column_icon" src={image} alt="" />
         {name}
       </h2>
-      <DropArea onDrop={() => onDrop(status, 0)}/>
 
-      {tasks.map(
-        (task, index) =>
-          task?.status === status && (
-            <Fragment key={index}>
+      {tasksCard.map(
+        (card) =>
+          card.state === status && (
+            <Fragment>
               <TaskCard
-                key={index}
-                title={task.name}
-                tags={task.tags}
-                indexCard={index}
+                taskCard={card}
+                users={users}
                 setActiveCard={setActiveCard}
               />
-              <DropArea onDrop={() => onDrop(status, index + 1)}/>
+              <DropArea onDrop={() => onDrop(status)}/>
             </Fragment>
           )
       )}

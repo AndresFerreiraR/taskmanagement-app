@@ -13,7 +13,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const CreateTask = () => {
     return (
-        <Container maxWidth="lg" >
+        <Container maxWidth="lg">
             <div style={Style.paper}>
                 <Typography component="h1" variant="h5">
                     Detalle Tarea

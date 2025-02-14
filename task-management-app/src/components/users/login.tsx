@@ -57,14 +57,14 @@ const Login = () => {
     if (userInputs.emailOrUser.includes("@")) {
       console.log("Entra por email");
       updatedLoginData = {
-        email: userInputs.emailOrUser,
+        userEmail: userInputs.emailOrUser,
         password: userInputs.password,
         userName: ''
       };
     } else {
       console.log("Entra por usuario");
       updatedLoginData = {
-        email: '',
+        userEmail: '',
         password: userInputs.password,
         userName: userInputs.emailOrUser
       };

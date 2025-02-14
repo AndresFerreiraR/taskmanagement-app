@@ -18,7 +18,7 @@ const CreateProject = () => {
         description: '',
         assignedTo: '',
         createdBy: '',
-        id: ''
+        id: null
     }
 
     const [project, setProject] = useState<IProject>(inputStateValues);
