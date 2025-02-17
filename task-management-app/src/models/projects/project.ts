@@ -1,6 +1,6 @@
 
 export default interface IProject {
-    id: string | null;
+    id: string;
     name: string;
     description: string;
     assignedTo: string;

@@ -121,7 +121,7 @@ const TaskForm = ({ setTasks }: TaskFormProps) => {
           </div>
 
           <button type="submit" className="task_submit">
-            + Add task
+            + Agregar tarea
           </button>
         </div>
       </form>

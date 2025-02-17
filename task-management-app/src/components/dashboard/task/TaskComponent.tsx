@@ -41,7 +41,7 @@ const TaskComponent = () => {
     if (card?.state !== status) {
         console.log('Otra vez', card);
       if (card?.assignedTo === "00000000-0000-0000-0000-000000000000") {
-        dispatch(openSnackbar("No ees posible cambiar de estado hasta que no se asigne un usaurio a la tarea."));
+        dispatch(openSnackbar("No es posible cambiar de estado hasta que no se asigne un usaurio a la tarea."));
       }
       else {
         UpdateTaskState(status, card)

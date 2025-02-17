@@ -33,3 +33,16 @@ export interface TaskCardProps {
   users: IUser[];
   setActiveCard: (id: string) => void;
 }
+
+export interface UpdateTaskProps {
+  users: IUser[];
+  taskId: string;
+  onClose: () => void 
+}
+
+
+export interface UpdateProjectProps {
+  projectId: string;
+  users: IUser[];
+  onClose: () => void
+}

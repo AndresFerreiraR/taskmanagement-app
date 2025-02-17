@@ -21,4 +21,10 @@ export default class TaskManagementActions {
         return taskManagementService.patch<IResponse<boolean>, ITask>(`Tasks/${id}`, task)
             .then((response: AxiosResponse<IResponse<boolean>>) => response.data);
     }
+
+    public GetTaskyId(taskId: string): Promise<IResponse<ITask>> {
+        return taskManagementService.get<IResponse<ITask>>(`Tasks/${taskId}`)
+            .then((response: AxiosResponse<IResponse<ITask>>) => response.data);
+            
+    }
 }

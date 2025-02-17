@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import IProject from "../../models/projects/project";
 import { Button, Container, Grid, MenuItem, TextField, Typography } from "@mui/material";
 import Style from "../../common/styles/style";
-import IUser from "../../models/users/IUser";
-import UserActions from "../../actions/userActions";
 import ProjectActions from "../../actions/projectActions";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../context/reducers";
 import { openSnackbar } from "../../context/reducers/snackbarReducer";
+import { UpdateProjectProps } from "../types";
+import { useNavigate } from "react-router-dom";
 
-const CreateProject = () => {
+const UpdateProject : FC<UpdateProjectProps> = ({users, projectId, onClose }) => {
 
     const userSesionState = useSelector((state: RootState) => state.userSesionState);
 
@@ -22,15 +22,21 @@ const CreateProject = () => {
     }
 
     const [project, setProject] = useState<IProject>(inputStateValues);
-    const [users, setUsers] = useState<IUser[]>([]);
-    const userAction = new UserActions();
     const projectAction = new ProjectActions();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
     useEffect(() => {
-        getAllUsers();
+        getProjectByid();
     }, [])
+
+    const getProjectByid = async () => {
+        const project = await projectAction.GetProjectById(projectId);
+        if (project.isSuccess) {
+            setProject(project.data);
+        }
+    }
 
     const setProjectValues = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -39,13 +45,6 @@ const CreateProject = () => {
             [name]: value,
         }));
     };
-
-    const getAllUsers = async () => {
-        const user = await userAction.GetAllUsers();
-        if (user.isSuccess) {
-            setUsers(user.data);
-        }
-    }
 
     const setUserCreate = async () => {
         setProject((previous) => ({
@@ -57,20 +56,23 @@ const CreateProject = () => {
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         await setUserCreate()
-        const result = await projectAction.CreateProject(project)
+        const result = await projectAction.EditProject(project)
         if (result.isSuccess) {
             console.log();
-            dispatch(openSnackbar("Project created succesfull"));
-
+            dispatch(openSnackbar("Proyecto editado correctamente"));
+            onClose()
+            navigate('/');
+        }else{
+            dispatch(openSnackbar("No fue posible editar el proyecto"));
         }
-        console.log("Los datos del proyecto son", project);
+
     };
 
     return (
         <Container maxWidth="md">
-            <div style={Style.paper}>
+            <div style={Style.paperUpdate}>
                 <Typography component="h1" variant="h5">
-                    Crear Proyecto
+                    Editar Proyecto
                 </Typography>
             </div>
             <form style={Style.form}>
@@ -101,7 +103,7 @@ const CreateProject = () => {
                             variant="outlined"
                             select
                             label="Asignar usurio"
-                            defaultValue="assignedTo"
+                            value={project.assignedTo}
                             onChange={(event) => {
                                 setProject((previous) => ({
                                     ...previous,
@@ -123,7 +125,7 @@ const CreateProject = () => {
                             variant="outlined"
                             select
                             label="Asignar usurio"
-                            defaultValue={project.createdBy}
+                            value={project.createdBy}
                             onChange={(event) => {
                                 setProject((previous) => ({
                                     ...previous,
@@ -159,4 +161,4 @@ const CreateProject = () => {
     )
 }
 
-export default CreateProject;
+export default UpdateProject;

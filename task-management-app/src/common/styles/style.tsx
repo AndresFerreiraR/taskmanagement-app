@@ -21,7 +21,19 @@ const styles: { [key: string]: CSSProperties } =  {
     height: 100,
   },
   icon: {
-    fontSize: 40,
+    fontSize: 40
+  },
+  paperTable: {
+    marginTop: 10,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  paperUpdate: {
+    marginTop: 10,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
 };
 
