@@ -276,7 +276,7 @@ const UpdateTask: FC<UpdateTaskProps> = ({ taskId, users, onClose }) => {
                                     <Typography>Planeación</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <DatePicker
+                                    <TextField
                                         fullWidth
                                         label="Nombre"
                                         variant="outlined"
