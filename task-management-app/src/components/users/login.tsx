@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   Container,
+  Dialog,
   TextField,
   Typography,
 } from "@mui/material";
@@ -14,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../context/reducers/userSesionReducer";
 import { openSnackbar } from "../../context/reducers/snackbarReducer";
 import { useNavigate } from 'react-router-dom';
+import RegisterUser from "./registerUser";
 
 
 const Login = () => {
@@ -27,6 +29,7 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
 
   const validateEmail = (email: string) => {
     // Expresión regular simple para validar email
@@ -52,45 +55,37 @@ const Login = () => {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    console.log("Inputs", userInputs);
     let updatedLoginData: ILoginUser;
     if (userInputs.emailOrUser.includes("@")) {
-      console.log("Entra por email");
       updatedLoginData = {
         userEmail: userInputs.emailOrUser,
         password: userInputs.password,
         userName: ''
       };
     } else {
-      console.log("Entra por usuario");
       updatedLoginData = {
         userEmail: '',
         password: userInputs.password,
         userName: userInputs.emailOrUser
       };
     }
-    console.log("el contendido del updatedLoginData es ", updatedLoginData)
     await callActionAuthenticate(updatedLoginData);
   };
 
   const callActionAuthenticate = async (user: ILoginUser) => {
-    console.log("Esto es desde el componente login", user);
     const response = await userAction.AuthenticateUser(user);
-    console.log("Se supone que hizo el request y la respuesta es", response);
     if(response && response.isSuccess){
-      console.log("entro al if", response)
       dispatch(login(response.data));
       dispatch(openSnackbar("User successfully logged in"));
       window.localStorage.setItem("userToken", response.data.token);
-      console.log("valor del dispatch", response.data)
       navigate('/');
     }else{
       console.log("NO se que mierda estoy haciendo");
     }
   }
 
-
   return (
+    <React.Fragment>
     <Container maxWidth="xs">
       <div style={Style.paper}>
         <Avatar style={Style.avatar}>
@@ -130,9 +125,22 @@ const Login = () => {
           >
             LogIn
           </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            style={Style.submit}
+            onClick={() => {setOpen(true)}}
+          >
+            Registrarse
+          </Button>
         </form>
       </div>
     </Container>
+    <Dialog maxWidth='xl' open={open} onClose={() => setOpen(false)}>
+        <RegisterUser onClose={() => setOpen(false)}/>
+      </Dialog>
+    </React.Fragment>
   );
 };
 

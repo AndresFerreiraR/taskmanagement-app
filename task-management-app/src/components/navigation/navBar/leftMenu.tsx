@@ -29,12 +29,6 @@ const LeftMenu = () => {
           </ListItem>
         </List>
         <Divider />
-        <List>
-          <ListItem component={Link} to="/Task/new">
-            <TaskIcon/>
-            <ListItemText classes={{ primary: 'listItemText'}} primary="Nueva tarea " />
-          </ListItem>
-        </List>
       </div>
     )
   }

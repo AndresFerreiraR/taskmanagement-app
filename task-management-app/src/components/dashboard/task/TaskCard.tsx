@@ -9,10 +9,7 @@ import UpdateTask from "../../task/updateTask";
 
 
 const TaskCard = ({ taskCard, users, setActiveCard }: TaskCardProps) => {
-
   const [open, setOpen] = useState(false);
-
-
   const getUserName = (userId: string): string => {
     const user = users.find((u) => u.id === userId);
     return user ? `${user.firstName} ${user.lastName}` : "No Asignado";

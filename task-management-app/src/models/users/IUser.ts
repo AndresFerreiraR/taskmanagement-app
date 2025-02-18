@@ -4,7 +4,7 @@ export default interface IUser {
   email: string,
   token: string,
   firstName: string,
-  middleInitial: string,
+  middleInitial?: string,
   lastName: string,
   password: string
 } 

@@ -36,4 +36,9 @@ export default class UserActions {
         return userService.get<IResponse<IUser>>(`User/${id}`)
             .then((response: AxiosResponse<IResponse<IUser>>) => response.data);
     }
+
+    public RegisterNewUser(user: IUser): Promise<IResponse<boolean>>{
+        return userService.post<IResponse<boolean>, IUser>('User', user)
+            .then((response : AxiosResponse<IResponse<boolean>>) => response.data);
+    }
 }

@@ -3,9 +3,15 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    Avatar,
     Button,
     Container,
     Grid,
+    IconButton,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
     MenuItem,
     TextField,
     Typography
@@ -18,9 +24,18 @@ import TaskManagementActions from "../../actions/taskManagementActions";
 import Tag from "../dashboard/task/Tag";
 import { useSelector } from "react-redux";
 import { RootState } from "../../context/reducers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import IComment from "../../models/task/comment";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const UpdateTask: FC<UpdateTaskProps> = ({ taskId, users, onClose }) => {
 
+    const projectState = useSelector((state: RootState) => state.projectState);
+    const userState = useSelector((state: RootState) => state.userSesionState);
     const TaskDataInitalState: ITask = {
         id: '',
         taskId: '',
@@ -41,18 +56,36 @@ const UpdateTask: FC<UpdateTaskProps> = ({ taskId, users, onClose }) => {
         comments: [],
     }
 
+    const newComment: IComment = {
+        id: '00000000-0000-0000-0000-000000000000',
+        date: new Date().toISOString(),
+        commentBy: userState.user.id,
+        textComment: ''
+    };
+
+
+
     const [taskData, setTasksData] = useState<ITask>(TaskDataInitalState);
-    const projectState = useSelector((state: RootState) => state.projectState);
+    const [comments, setComments] = useState<IComment[]>([]);
+    const [inputComment, setInputComment] = useState<IComment>(newComment);
     const taskAction = new TaskManagementActions();
 
     useEffect(() => {
         getTaskById();
     }, []);
 
+    useEffect(() => {
+        console.log("lista de comentarios", comments);
+    }, [comments]);
+
     const getTaskById = async () => {
         const task = await taskAction.GetTaskyId(taskId);
         if (task.isSuccess) {
+            console.log("Mierda esto es lo que esta llegando", task.data);
             setTasksData(task.data);
+            if (task.data != undefined && task.data.comments != undefined && task.data.comments.length > 0) {
+                setComments(task.data.comments);
+            }
         }
     };
 
@@ -63,6 +96,69 @@ const UpdateTask: FC<UpdateTaskProps> = ({ taskId, users, onClose }) => {
             [name]: value,
         }));
     };
+
+    const setCommentValues = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setInputComment((previous) => ({
+            ...previous,
+            [name]: value,
+        }));
+    }
+
+    const setCommentsCreate = async () => {
+        console.log("aqui esta la asignacion", comments) 
+        setTasksData((previous) => ({
+            ...previous,
+            comments: comments
+        }));
+    }
+
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        await setCommentsCreate();
+        e.preventDefault();
+        console.log("Los datos de la tarea son", taskData);
+        onClose();
+    };
+
+    const getUserName = (userId: string): string => {
+        const user = users.find((u) => u.id === userId);
+        return user ? `${user.firstName} ${user.lastName}` : "No Asignado";
+    };
+
+    const seveComment = () => {
+        comments.push(inputComment);
+        console.log("Esta es la lista de comentarios en memoria", comments)
+        setInputComment(newComment);
+    }
+
+
+    //     let indiceEliminar = ingresos.findIndex(i => i.id === id);
+    //   ingresos.splice(indiceEliminar, 1);
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editComment, setEditComment] = useState("");
+
+    const handleEditComment = (id: string) => {
+        const updatedComments = comments.map((c) =>
+            c.id === id ? { ...c, textComment: editComment} : c
+        );
+        setComments(updatedComments);
+        setEditingId(null);
+        setEditComment("");
+    };
+
+    const handleEdit = (id: string) => {
+        setEditingId(id);
+        const commendFinde = comments.find(c => c.id === id);
+        if(commendFinde != null && commendFinde != undefined && commendFinde.textComment != null){
+            setEditComment(commendFinde.textComment);
+        }        
+    };
+
+
+    const handleDeleteComment = (id: string) => {
+        const indiceEliminar = comments.findIndex(i => i.id === id);
+        comments.splice(indiceEliminar, 1);
+    }
 
     return (
         <Container maxWidth="lg">
@@ -252,14 +348,55 @@ const UpdateTask: FC<UpdateTaskProps> = ({ taskId, users, onClose }) => {
                                     <AccordionDetails>
                                         <TextField
                                             fullWidth
-                                            label="Apellido"
-                                            variant="outlined"
-                                            name="surname"
-                                            rows={4}
                                             multiline
-                                            value={1}
-                                            onChange={() => { }}
+                                            variant="outlined"
+                                            placeholder="Escribe un comentario..."
+                                            name="textComment"
+                                            value={inputComment.textComment}
+                                            onChange={setCommentValues}
+                                            sx={{ mb: 2 }}
                                         />
+                                        <Button variant="contained" onClick={seveComment} fullWidth>
+                                            Comentar
+                                        </Button>
+                                        <List>
+                                            {comments.map((comment) => (
+                                                <ListItem key={comment.id} sx={{ mt: 2, border: "1px solid #ddd", borderRadius: 2, p: 2 }}>
+                                                    <ListItemAvatar>
+                                                        <Avatar>
+                                                            <AccountCircleIcon />
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText
+                                                        primary={getUserName(comment.commentBy)}
+                                                        secondary={
+                                                            <>
+                                                                <Typography variant="body2" color="textSecondary">
+                                                                    {"Hace un Tiempo"}
+                                                                </Typography>
+                                                                {editingId === comment.id ? (
+                                                                    <TextField
+                                                                        fullWidth
+                                                                        value={editComment}
+                                                                        onChange={(e) => setEditComment(e.target.value)}
+                                                                        onBlur={() => handleEditComment(comment.id)}
+                                                                        autoFocus
+                                                                    />
+                                                                ) : (
+                                                                    <Typography>{comment.textComment}</Typography>
+                                                                )}
+                                                            </>
+                                                        }
+                                                    />
+                                                    <IconButton onClick={() => handleEdit(comment.id)}>
+                                                        <EditIcon color="primary" />
+                                                    </IconButton>
+                                                    <IconButton onClick={() => {handleDeleteComment(comment.id)}}>
+                                                        <DeleteIcon color="error" />
+                                                    </IconButton>
+                                                </ListItem>
+                                            ))}
+                                        </List>
                                     </AccordionDetails>
                                 </Accordion>
                             </Grid>
@@ -276,25 +413,85 @@ const UpdateTask: FC<UpdateTaskProps> = ({ taskId, users, onClose }) => {
                                     <Typography>Planeación</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <TextField
-                                        fullWidth
-                                        label="Nombre"
-                                        variant="outlined"
-                                        name="name"
-                                        value={1}
-                                        onChange={() => { }}
-                                        sx={{ marginBottom: 2 }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        label="Apellido"
-                                        variant="outlined"
-                                        name="surname"
-                                        multiline
-                                        rows={4}
-                                        value={1}
-                                        onChange={() => { }}
-                                    />
+                                    <Grid container spacing={2}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <Grid item xs={12} sm={12}>
+                                                <DatePicker
+                                                    label="Fecha de Creación"
+                                                    value={taskData.creationDate ? dayjs(taskData.creationDate, "YYYY-MM-DD") : null}
+                                                    onChange={(newValue) =>
+                                                        setTasksData((prev) => ({
+                                                            ...prev,
+                                                            creationDate: newValue ? newValue.format("YYYY-MM-DD") : "",
+                                                        }))
+                                                    }
+                                                    format="DD/MM/YYYY"
+                                                    slotProps={{ textField: { fullWidth: true } }}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={12}>
+                                                <DatePicker
+                                                    label="Fecha De Inicio"
+                                                    value={taskData.startDate ? dayjs(taskData.startDate) : null}
+                                                    onChange={(newValue) =>
+                                                        setTasksData((prev) => ({
+                                                            ...prev,
+                                                            startDate: newValue ? newValue.format("YYYY-MM-DD") : "",
+                                                        }))
+                                                    }
+                                                    format="DD/MM/YYYY"
+                                                    slotProps={{ textField: { fullWidth: true } }}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={12}>
+                                                <DatePicker
+                                                    label="Fecha Fin"
+                                                    value={taskData.endDate ? dayjs(taskData.endDate) : null}
+                                                    onChange={(newValue) =>
+                                                        setTasksData((prev) => ({
+                                                            ...prev,
+                                                            endDate: newValue ? newValue.format("YYYY-MM-DD") : "",
+                                                        }))
+                                                    }
+                                                    format="DD/MM/YYYY"
+                                                    slotProps={{ textField: { fullWidth: true } }}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    type="number"
+                                                    label="Tiempo Estimado"
+                                                    variant="outlined"
+                                                    name="originalTimeEstimated"
+                                                    value={taskData.originalTimeEstimated}
+                                                    onChange={setProjectValues}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    label="Tiempo Restante"
+                                                    type="number"
+                                                    variant="outlined"
+                                                    name="remainingTime"
+                                                    value={taskData.remainingTime}
+                                                    onChange={setProjectValues}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    label="Tiempo Completo"
+                                                    type="number"
+                                                    variant="outlined"
+                                                    name="completedTime"
+                                                    value={taskData.completedTime}
+                                                    onChange={setProjectValues}
+                                                />
+                                            </Grid>
+                                        </LocalizationProvider>
+                                    </Grid>
                                 </AccordionDetails>
                             </Accordion>
                         </Grid>
@@ -310,7 +507,7 @@ const UpdateTask: FC<UpdateTaskProps> = ({ taskId, users, onClose }) => {
                             color="primary"
                             size="large"
                             style={Style.submit}
-                            onClick={onClose}
+                            onClick={handleSubmit}
                         >
                             Send
                         </Button>

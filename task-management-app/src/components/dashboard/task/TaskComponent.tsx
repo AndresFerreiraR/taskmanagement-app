@@ -25,7 +25,6 @@ const TaskComponent = () => {
   const [activeCard, setActiveCard] = useState<string | null>(null);
   const dispatch = useDispatch();
 
-
   function onChangeActiveCard(value: string) {
     setActiveCard(value)
   }

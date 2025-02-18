@@ -2,6 +2,6 @@
 export default interface IComment {
     id: string;
     textComment: string;
-    userId: string;     
+    commentBy: string;     
     date: string;
 }

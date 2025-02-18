@@ -11,7 +11,7 @@ const TaskColumn = ({
   users,
   status,
   setActiveCard,
-  onDrop,
+  onDrop
 }: TaskColumnProps) => {
 
   return (
@@ -30,7 +30,7 @@ const TaskColumn = ({
                 users={users}
                 setActiveCard={setActiveCard}
               />
-              <DropArea onDrop={() => onDrop(status)}/>
+              <DropArea onDrop={() => onDrop(status)} />
             </Fragment>
           )
       )}

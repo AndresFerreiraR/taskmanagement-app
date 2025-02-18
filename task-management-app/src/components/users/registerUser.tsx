@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { Container, Typography, Grid, TextField, Button } from "@mui/material";
 import Style from "../../common/styles/style";
 import IUser from "../../models/users/IUser";
+import UserActions from "../../actions/userActions";
+import { useDispatch } from "react-redux";
+import { openSnackbar } from "../../context/reducers/snackbarReducer";
+import { RegisterUserProps } from "../types";
 
-const RegisterUser = () => {
+const RegisterUser: FC<RegisterUserProps> = ({onClose}) => {
 
   const initialState: IUser = {
     id: '',
@@ -17,7 +21,8 @@ const RegisterUser = () => {
 };
 
 const [user, setUser] = useState<IUser>(initialState);
-
+const userAction = new UserActions();
+const dispatch = useDispatch();
 
 const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
   const {name, value} = e.target;
@@ -26,6 +31,17 @@ const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     [name]: value
   }))
 };
+
+
+const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    const response = await userAction.RegisterNewUser(user);
+    if(response.isSuccess){
+      dispatch(openSnackbar("Usuario Creado Correctamente"));
+    }
+    onClose();
+  };
+
 
   return (
     <Container maxWidth="md">
@@ -109,7 +125,7 @@ const setMemoryValue = (e: React.ChangeEvent<HTMLInputElement>) => {
               color="primary"
               size="large"
               style={Style.submit}
-              //onClick={userRegisterButton}
+              onClick={handleSubmit}
             >
               Send
             </Button>

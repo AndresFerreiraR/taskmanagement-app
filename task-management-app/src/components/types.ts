@@ -37,12 +37,16 @@ export interface TaskCardProps {
 export interface UpdateTaskProps {
   users: IUser[];
   taskId: string;
-  onClose: () => void 
+  onClose: () => void
 }
 
 
 export interface UpdateProjectProps {
   projectId: string;
   users: IUser[];
+  onClose: () => void
+}
+
+export interface RegisterUserProps {
   onClose: () => void
 }
