@@ -1,34 +1,40 @@
-interface Style {
-  paper: React.CSSProperties;
-  form: React.CSSProperties;
-  submit: React.CSSProperties;
-  avatar: React.CSSProperties;
-  icon: React.CSSProperties;
-}
+import { CSSProperties } from 'react';
 
-const Style : Style = {
+const styles: { [key: string]: CSSProperties } =  {
   paper: {
-    marginTop: 8,
+    marginTop: 90,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   form: {
     width: "100%",
-    marginTop: 20
+    marginTop: 20,
   },
   submit: {
-    marginTop: 15
+    marginTop: 15,
   },
   avatar: {
     marginTop: 5,
     backgroundColor: "#1976d2",
-    width: 60,
-    height: 60
+    width: 100,
+    height: 100,
   },
   icon: {
     fontSize: 40
-  }
-}
+  },
+  paperTable: {
+    marginTop: 10,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  paperUpdate: {
+    marginTop: 10,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+};
 
-export default Style
+export default styles;

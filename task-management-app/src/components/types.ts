@@ -1,3 +1,6 @@
+import ITaskCard from "../models/task/taskCard";
+import IUser from "../models/users/IUser";
+
 export interface Task {
   name: string;
   status: string;
@@ -11,20 +14,14 @@ export interface TagProps {
   selectedTag?: boolean;
 }
 
-export interface TaskcolumnProps {
-  name: string;
-  image: string;
-  tasks: {}[];
-  status: string;
-}
-
 export interface TaskColumnProps {
   name: string;
   image: string;
-  tasks: Task[];
+  tasksCard: ITaskCard[];
+  users: IUser[];
   status: string;
-  setActiveCard: (id: any) => void;
-  onDrop: (status: string, position: number) => void;
+  setActiveCard: (id: string) => void;
+  onDrop: (status: string) => void;
 }
 
 export interface TaskFormProps {
@@ -32,8 +29,24 @@ export interface TaskFormProps {
 }
 
 export interface TaskCardProps {
-  indexCard: number;
-  title: string;
-  tags: string[];
-  setActiveCard: (id: any) => void;
+  taskCard: ITaskCard;
+  users: IUser[];
+  setActiveCard: (id: string) => void;
+}
+
+export interface UpdateTaskProps {
+  users: IUser[];
+  taskId: string;
+  onClose: () => void
+}
+
+
+export interface UpdateProjectProps {
+  projectId: string;
+  users: IUser[];
+  onClose: () => void
+}
+
+export interface RegisterUserProps {
+  onClose: () => void
 }

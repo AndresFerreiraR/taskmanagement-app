@@ -1,0 +1,40 @@
+.seccionDesktop {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  /* md = 960px */
+  .seccionDesktop {
+    display: flex;
+  }
+}
+
+.mobileSession {
+  display: flex;
+}
+
+@media (min-width: 960px) {
+  .mobileSession {
+    display: none;
+  }
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.avatarSize {
+  width: 40px;
+  height: 40px;
+}
+
+.list {
+  width: 250px;
+}
+
+.listItemText {
+  font-size: 14px;
+  font-weight: 600;
+  padding-left: 15px;
+  color: #212121;
+}
