@@ -21,18 +21,15 @@ const TaskColumn = ({
         {name}
       </h2>
 
-      {tasksCard.map(
-        (card) =>
-          card.state === status && (
-            <Fragment>
-              <TaskCard
-                taskCard={card}
-                users={users}
-                setActiveCard={setActiveCard}
-              />
-              <DropArea onDrop={() => onDrop(status)} />
-            </Fragment>
-          )
+      {tasksCard.filter((card) => card.state === status).map((card) => (
+        <Fragment key={card.id}>
+          <TaskCard taskCard={card} users={users} setActiveCard={setActiveCard} />
+          <DropArea onDrop={() => onDrop(status)} />
+        </Fragment>
+      ))}
+      
+      {tasksCard.filter((card) => card.state === status).length === 0 && (
+        <DropArea onDrop={() => onDrop(status)} />
       )}
     </section>
   );
